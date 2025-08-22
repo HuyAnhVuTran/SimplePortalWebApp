@@ -5,9 +5,10 @@ import { GrCheckbox } from 'react-icons/gr';
 import { GrCheckboxSelected } from 'react-icons/gr';
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Added eye icons
 
+import { useAuth } from '../src/context/AuthContext';
 
 //backend handling
-import axios from 'axios'; // For API calls
+
 import { toast } from 'react-toastify'; // For error notifications
 //import 'react-toastify/dist/ReactToastify.css'; // Toast styles
 
@@ -15,9 +16,8 @@ import { toast } from 'react-toastify'; // For error notifications
 
 export default function Login() {
     const [loading, setLoading] = useState(false);
-
     const [formData, setFormData] = useState({
-        username: '',
+        email: '',
         password: ''
     });
     const [rememberPassword, setRememberPassword] = useState(false);
@@ -25,20 +25,16 @@ export default function Login() {
     
     //backend tracking
     const [isSubmitting, setIsSubmitting] = useState(false); 
+    const {login} = useAuth();
+
     let navigate=useNavigate();
     
     useEffect(() => {
-        //handle backend db
-        // const rememberedUsername = localStorage.getItem('rememberedUsername');
-        //     if (rememberedUsername) {
-        //         setFormData(prev => ({ ...prev, username: rememberedUsername }));
-        //         setRememberPassword(true);
-        //     }
 
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-        }, 2000);
+        }, 1000);
     }, []);
 
     const handleInputChange = (e) => {
@@ -50,47 +46,37 @@ export default function Login() {
     };
 
     //check if info exists
-//    const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setIsSubmitting(true);
-    
-//     try {
-//         // API call to Spring Boot backend
-//         const response = await axios.post('/api/auth/login', {
-//             username: formData.username,
-//             password: formData.password
-//         });
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-//         // Remember username if checkbox is ticked
-//         if (rememberPassword) {
-//             localStorage.setItem('rememberedUsername', formData.username);
-//         } else {
-//             localStorage.removeItem('rememberedUsername');
-//         }
+     try {
+      const result = await login(formData.email, formData.password);
 
-//         // Store JWT token if available
-//         if (response.data.token) {
-//             localStorage.setItem('authToken', response.data.token);
-//         }
+      if (result.success) {
+        // ✅ Remember username (optional)
+        if (rememberPassword) {
+          localStorage.setItem('rememberedEmail', formData.email);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+        }
 
-//         navigate('/dashboard');
-        
-//     } catch (error) {
-//         // Show error notification
-//         toast.error(error.response?.data?.message || 'Login failed. Please try again.', {
-//             position: "top-center",
-//             autoClose: 5000,
-//         });
-//     } finally {
-//         setIsSubmitting(false);
-//     }
-// };
+        navigate('/dashboard'); // ✅ redirect only on success
+      } else {
+        toast.error(result.message || "Login failed!");
+      }
+    } catch (err) {
+      toast.error("Something went wrong!");
+    } finally {
+      setIsSubmitting(false);
+    }
+};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Login submitted:', formData, rememberPassword);
-    };
-    //password show vs noshow
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log('Login submitted:', formData, rememberPassword);
+    // };
+    // //password show vs noshow
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -111,14 +97,14 @@ export default function Login() {
                 <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
                     <div className="mb-4">
                         <label className="block font-bold mb-2 " htmlFor="username">
-                            Username
+                            Email
                         </label>
                         <input
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#F1E9DA]"
                             type="text"
-                            id="username"
-                            name="username"
-                            value={formData.username}
+                            id="email"
+                            name="email"
+                            value={formData.email}
                             onChange={handleInputChange}
                             required
                         />
@@ -166,7 +152,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="w-full  hover:bg-blue-700 font-bold py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-[#000000]"
+                        className="w-full  hover:bg-blue-700 font-bold py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-[#2C2F48]"
                         onClick={()=>navigate('/dashboard')}    
                     >
                         Log In

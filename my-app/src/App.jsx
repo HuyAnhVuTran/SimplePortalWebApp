@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import {AuthProvider, useAuth} from './context/AuthContext.jsx'
 import Signup from '../screens/Signup.jsx'
 import Login from '../screens/login.jsx'
@@ -78,9 +79,9 @@ function AppSetup(){
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      
         <AppSetup/>
-      </BrowserRouter>
+      
     </AuthProvider>
   )
 }
