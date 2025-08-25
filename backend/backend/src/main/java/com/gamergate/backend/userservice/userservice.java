@@ -35,8 +35,14 @@ public class userservice {
             throw new RuntimeException("Email already exists!");
 
         }
-
+        user.setEmail(user.getEmail());
         user.setPassword(PasswordEncoder.encode(user.getPassword()));
+        if (user.getRole()==null){
+            user.setRole("USER");
+        }
+        if(user.getIsActive()==null){
+            user.setIsActive(true);
+        }
         return userRepo.save(user);
     }
 

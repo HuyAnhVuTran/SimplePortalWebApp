@@ -72,11 +72,7 @@ export default function Login() {
     }
 };
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log('Login submitted:', formData, rememberPassword);
-    // };
-    // //password show vs noshow
+ 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };

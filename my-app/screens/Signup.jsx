@@ -1,6 +1,8 @@
 import { React, useState } from "react";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiArrowRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../src/context/AuthContext";
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ export default function Signup() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const navigate=useNavigate();
+    const {register} =useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -69,18 +72,42 @@ export default function Signup() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (validateForm()) {
+    //         setIsSubmitting(true);
+    //         // Simulate API call
+    //         setTimeout(() => {
+    //             setIsSubmitting(false);
+    //             alert('Account created successfully!');
+    //             navigate('/dashboard');
+    //         }, 1500);
+    //     }
+    // };
+
+      const handleSubmit = async (e) => {
+            e.preventDefault();
+            if (!validateForm()) return;
+           
             setIsSubmitting(true);
-            // Simulate API call
-            setTimeout(() => {
-                setIsSubmitting(false);
-                alert('Account created successfully!');
-                navigate('/dashboard');
-            }, 1500);
-        }
-    };
+            try {
+            const result = await register({
+                email: formData.email,
+                password: formData.password,
+            });
+
+            if (result.success) {
+                toast.success("Account created successfully!");
+                navigate("/dashboard");
+            } else {
+                toast.error(result.message || "Signup failed!");
+            }
+            } catch (err) {
+            toast.error("Something went wrong!");
+            } finally {
+            setIsSubmitting(false);
+            }
+  };
     document.title="Sign Up";
     return (
         <div className=" flex items-center justify-center bg-gray-50 p-4">
@@ -105,7 +132,7 @@ export default function Signup() {
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            placeholder="Enter username"
+                            placeholder="Enter Email"
                         />
                     </div>
                     {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
@@ -199,7 +226,7 @@ export default function Signup() {
                             ? 'bg-blue-400 cursor-not-allowed'
                             : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
                     } transition-colors`}
-                    onClick={()=>navigate('/dashboard')}
+                   
                 >
                     {isSubmitting ? 'Creating Account...' : (
                         <>
