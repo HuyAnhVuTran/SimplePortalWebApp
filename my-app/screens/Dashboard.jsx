@@ -11,9 +11,15 @@ import {
 } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '../src/context/AuthContext';
+
+
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('open-positions');
     const navigate = useNavigate();
+
+
+    const {logout} =useAuth();
     
     // Mock applications data
     const [applications, setApplications] = useState([
@@ -31,7 +37,10 @@ export default function Dashboard() {
     ]);
     document.title="Dashboard";
 
-
+    const handleLogOut=()=>{
+        logout();
+        navigate("/login");
+    }
 
     return (
         <div className=" absolute w-screen h-screen bg-gray-100 right-0 top-0">
@@ -98,8 +107,9 @@ export default function Dashboard() {
                 {/* Logout */}
                 <div className="p-4 border-t border-gray-200">
                     <button 
+                    type="button"
                         className="flex items-center text-red-600 hover:text-red-800" 
-                        onClick={() => navigate('/login')}
+                        onClick={handleLogOut}
                     >
                         <FiLogOut className="mr-2" />
                         Logout
