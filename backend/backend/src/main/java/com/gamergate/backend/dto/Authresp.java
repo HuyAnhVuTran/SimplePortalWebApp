@@ -12,4 +12,15 @@ public class Authresp {
         this.token=token;
         this.user=user;
     }
+
+    public String getToken(){
+        return this.token;
+    }
+
+    public String getType(){
+        return this.type;
+    }
+    public UserDTO getUser(){
+        return this.user;
+    }
 }

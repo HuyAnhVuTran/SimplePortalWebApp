@@ -37,6 +37,9 @@ public class userservice {
         }
         user.setEmail(user.getEmail());
         user.setPassword(PasswordEncoder.encode(user.getPassword()));
+        if(user.getName().equals(null)){
+            user.setName("Bill");
+        }
         if (user.getRole()==null){
             user.setRole("USER");
         }
