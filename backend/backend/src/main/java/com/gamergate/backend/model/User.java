@@ -18,7 +18,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String name = "Bill";
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -26,8 +26,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone", nullable = false, unique = true)
-    private String phone;
+    @Column(name = "phone", nullable = true, unique = true)
+    private String phone="4163564679";
 
     @Column(name = "role", nullable = false)
     private String role = "USER";
