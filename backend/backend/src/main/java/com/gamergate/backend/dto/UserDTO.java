@@ -17,7 +17,6 @@ public class UserDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
-
     private String phone;
     private String role;
     private Boolean isActive;

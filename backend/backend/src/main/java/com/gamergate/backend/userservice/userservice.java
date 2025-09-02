@@ -49,19 +49,16 @@ public class userservice {
         return userRepo.save(user);
     }
 
-
     public User authUser(String email, String password){
         Optional<User> userOptional = userRepo.findByEmail(email);
 
         if(userOptional.isEmpty()){
             throw new RuntimeException("Please double check your email");
         }
-
         User user = userOptional.get();
         if(!PasswordEncoder.compare(password,user.getPassword())){
             throw new RuntimeException("Invalid password");
         }
-
         if (user.getIsActive().equals(Boolean.FALSE)){
             throw new RuntimeException("The account has been deactivated");
         }
@@ -124,7 +121,6 @@ public class userservice {
         if (!PasswordEncoder.compare(currentPassword, user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
-
         user.setPassword(PasswordEncoder.encode(newPassword));
         return userRepo.save(user);
     }

@@ -11,7 +11,6 @@ public class passwordencoder {
 
         return encodeagent.encode(pass);
     }
-
     public boolean compare(String inputPass, String encoded){
         return encodeagent.matches(inputPass,encoded);
     }

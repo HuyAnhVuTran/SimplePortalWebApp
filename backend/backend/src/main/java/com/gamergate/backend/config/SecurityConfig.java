@@ -17,13 +17,10 @@ import java.util.*;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
     @Autowired
     private JWTfilter jwtAuthenticationFilter;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http.csrf().disable()
                 .cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -31,12 +28,8 @@ public class SecurityConfig {
                 requestMatchers("/api/auth/**").permitAll().
                 anyRequest().authenticated().
                 and().addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
-
-
         return http.build();
     }
-
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

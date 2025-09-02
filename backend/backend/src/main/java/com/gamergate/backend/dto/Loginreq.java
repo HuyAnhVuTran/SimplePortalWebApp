@@ -10,6 +10,4 @@ public class Loginreq {
 
     @NotBlank(message = "Password must not be left blank")
     private String password;
-
-
 }

@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     @Column(name = "phone", nullable = true, unique = true)
-    private String phone="4163564679";
+    private String phone="4168938686";
 
     @Column(name = "role", nullable = false)
     private String role = "USER";

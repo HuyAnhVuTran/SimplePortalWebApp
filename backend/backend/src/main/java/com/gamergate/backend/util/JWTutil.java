@@ -20,17 +20,14 @@ public class JWTutil {
     private Key getSigningKey(){
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
-
     public String generateToken (String email){
         return Jwts.builder().setSubject(email).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis()+expiration))
                 .signWith(getSigningKey(),SignatureAlgorithm.HS256).compact();
 
     }
-
     public String extractEmail(String token){
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
-
     public boolean validateToken (String token){
         try {
             Jwts.parserBuilder()
