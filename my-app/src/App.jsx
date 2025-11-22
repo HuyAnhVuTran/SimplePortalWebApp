@@ -35,32 +35,6 @@ const PublicRoute = ({ children }) => {
   return !isAuthenticated ? children : <Navigate to="/dashboard" />;
 };
 
-// function AppSetup(){
-//   return (
-//     <>
-//     <Routes>
-//       <Route index element={<Login/>} />
-//       <Route path='/login' element={<Login/>} />
-//       <Route path='/signup' element={<Signup/>} />
-//       <Route path='/forgot' element={<Forgot/>} />
-//       <Route path='/email' element={<EmailForgot/>} />
-
-
-//       <Route path='/dashboard' element={<Dashboard/>} />
-//     </Routes>
-   
-
-//     </>
-//   )
-// }
-
-// function App() {
-//   return (
-//     <>
-//         <AppSetup/>
-//     </>
-//   )
-// }
 
 
 

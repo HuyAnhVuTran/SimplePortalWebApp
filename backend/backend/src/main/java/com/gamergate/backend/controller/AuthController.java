@@ -4,7 +4,7 @@ import com.gamergate.backend.dto.Authresp;
 import com.gamergate.backend.dto.Loginreq;
 import com.gamergate.backend.dto.UserDTO;
 import com.gamergate.backend.model.User;
-import com.gamergate.backend.userservice.userservice;
+import com.gamergate.backend.userservice.UserService;
 import com.gamergate.backend.util.JWTutil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
-    private userservice userService;
+    private UserService userService;
 
     @Autowired
     private JWTutil jwtUtil;

@@ -1,25 +1,25 @@
 package com.gamergate.backend.userservice;
 
 import com.gamergate.backend.model.User;
-import com.gamergate.backend.repository.user_repo;
+import com.gamergate.backend.repository.UserRepository;
 import com.gamergate.backend.util.passwordencoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class userservice {
+public class UserService {
 
     @Autowired
-    private user_repo userRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private passwordencoder PasswordEncoder;
 
     public List<User> getAllUsers(){
         return userRepo.findAll();
-
     }
 
     public Optional<User> getUserbyId(Long id){
@@ -33,13 +33,14 @@ public class userservice {
     public User SignUpUser (User user){
         if(userRepo.findByEmail(user.getEmail()).isPresent()){
             throw new RuntimeException("Email already exists!");
-
         }
         user.setEmail(user.getEmail());
         user.setPassword(PasswordEncoder.encode(user.getPassword()));
-        if(user.getName().equals(null)){
-            user.setName("Bill");
+        
+        if (user.getName() == null){
+             // Default name logic removed or handled elsewhere if needed
         }
+        
         if (user.getRole()==null){
             user.setRole("USER");
         }
@@ -59,7 +60,7 @@ public class userservice {
         if(!PasswordEncoder.compare(password,user.getPassword())){
             throw new RuntimeException("Invalid password");
         }
-        if (user.getIsActive().equals(Boolean.FALSE)){
+        if (Boolean.FALSE.equals(user.getIsActive())){
             throw new RuntimeException("The account has been deactivated");
         }
         return user;

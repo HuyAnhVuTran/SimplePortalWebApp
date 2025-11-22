@@ -1,9 +1,9 @@
-import { React, useState } from 'react'
-import { FiLock, FiCheck, FiEye, FiEyeOff } from 'react-icons/fi'
+import React, { useState } from 'react'
+import { FiLock, FiCheck, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 
 export default function ForgotPassword() {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         newPassword: '',
         confirmPassword: ''
@@ -14,42 +14,25 @@ export default function ForgotPassword() {
     })
     const [errors, setErrors] = useState({})
     const [isSubmitting, setIsSubmitting] = useState(false)
-    
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }))
-        // Clear error when typing
+        setFormData(prev => ({ ...prev, [name]: value }))
         if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: null
-            }))
+            setErrors(prev => ({ ...prev, [name]: null }))
         }
     }
 
     const togglePasswordVisibility = (field) => {
-        setShowPassword(prev => ({
-            ...prev,
-            [field]: !prev[field]
-        }))
+        setShowPassword(prev => ({ ...prev, [field]: !prev[field] }))
     }
 
     const validateForm = () => {
         const newErrors = {}
-        
-        if (!formData.newPassword) {
-            newErrors.newPassword = 'Password is required'
-        } else if (formData.newPassword.length < 8) {
-            newErrors.newPassword = 'Password must be at least 8 characters'
-        }
+        if (!formData.newPassword) newErrors.newPassword = 'Password is required'
+        else if (formData.newPassword.length < 8) newErrors.newPassword = 'Password must be at least 8 characters'
 
-        if (formData.newPassword !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match'
-        }
+        if (formData.newPassword !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
@@ -59,108 +42,94 @@ export default function ForgotPassword() {
         e.preventDefault()
         if (validateForm()) {
             setIsSubmitting(true)
-            // Simulate API call
             setTimeout(() => {
                 setIsSubmitting(false)
-                alert('Password changed successfully!')
                 navigate('/login')
             }, 1500)
         }
     }
-    document.title="Reset Password";
+
+    document.title = "Reset Password | GamerGate";
+
     return (
-        <div className=" flex items-center justify-center bg-gray-50 p-4">
-            <form 
-                onSubmit={handleSubmit}
-                className="w-full max-w-md bg-white p-8 rounded-lg shadow-md"
-            >
-                <h1 className="text-2xl font-bold text-center mb-6">Reset Your Password</h1>
-                
-                {/* New Password Field */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 mb-2 font-medium">
-                        New Password
-                    </label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiLock className="text-gray-400" />
-                        </div>
-                        <input
-                            className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                                errors.newPassword 
-                                    ? 'border-red-500 focus:ring-red-200' 
-                                    : 'border-gray-300 focus:ring-blue-200'
-                            } bg-[#F1E9DA]`}
-                            type={showPassword.new ? "text" : "password"}
-                            name="newPassword"
-                            value={formData.newPassword}
-                            onChange={handleChange}
-                            placeholder="Enter new password"
-                        />
-                        <button
-                            type="button"
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                            onClick={() => togglePasswordVisibility('new')}
-                            aria-label={showPassword.new ? "Hide password" : "Show password"}
-                        >
-                            {showPassword.new ? <FiEyeOff className="text-gray-500" /> : <FiEye className="text-gray-500" />}
-                        </button>
-                    </div>
-                    {errors.newPassword && (
-                        <p className="mt-1 text-sm text-red-600">{errors.newPassword}</p>
-                    )}
-                </div>
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="glass-card w-full max-w-md p-8 rounded-2xl shadow-2xl animate-fade-in">
+                <h1 className="text-3xl font-bold text-center text-white mb-2">Reset Password</h1>
+                <p className="text-gray-400 text-center mb-8 text-sm">Create a strong new password for your account</p>
 
-                {/* Confirm Password Field */}
-                <div className="mb-6">
-                    <label className="block text-gray-700 mb-2 font-medium">
-                        Confirm Password
-                    </label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiCheck className="text-gray-400" />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* New Password Field */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                            New Password
+                        </label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <FiLock className="text-gray-400" />
+                            </div>
+                            <input
+                                className={`glass-input w-full pl-11 pr-12 py-3 rounded-xl focus:outline-none ${errors.newPassword ? 'border-red-500/50 focus:border-red-500' : ''
+                                    }`}
+                                type={showPassword.new ? "text" : "password"}
+                                name="newPassword"
+                                value={formData.newPassword}
+                                onChange={handleChange}
+                                placeholder="Enter new password"
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors"
+                                onClick={() => togglePasswordVisibility('new')}
+                            >
+                                {showPassword.new ? <FiEyeOff /> : <FiEye />}
+                            </button>
                         </div>
-                        <input
-                            className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                                errors.confirmPassword 
-                                    ? 'border-red-500 focus:ring-red-200' 
-                                    : 'border-gray-300 focus:ring-blue-200'
-                            } bg-[#F1E9DA]`}
-                            type={showPassword.confirm ? "text" : "password"}
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            placeholder="Confirm new password"
-                        />
-                        <button
-                            type="button"
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                            onClick={() => togglePasswordVisibility('confirm')}
-                            aria-label={showPassword.confirm ? "Hide password" : "Show password"}
-                        >
-                            {showPassword.confirm ? <FiEyeOff className="text-gray-500" /> : <FiEye className="text-gray-500" />}
-                        </button>
+                        {errors.newPassword && <p className="mt-1 text-sm text-red-400">{errors.newPassword}</p>}
                     </div>
-                    {errors.confirmPassword && (
-                        <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-                    )}
-                </div>
 
-                {/* Submit Button */}
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`w-full py-2 px-4 rounded-md text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                        isSubmitting
-                            ? 'bg-blue-400 cursor-not-allowed'
-                            : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
-                    } transition-colors`}
-                    onClick={()=>navigate('/dashboard')}
-                >
-                    {isSubmitting ? 'Processing...' : 'Confirm & Log In'}
-                </button>
-            </form>
+                    {/* Confirm Password Field */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                            Confirm Password
+                        </label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <FiCheck className="text-gray-400" />
+                            </div>
+                            <input
+                                className={`glass-input w-full pl-11 pr-12 py-3 rounded-xl focus:outline-none ${errors.confirmPassword ? 'border-red-500/50 focus:border-red-500' : ''
+                                    }`}
+                                type={showPassword.confirm ? "text" : "password"}
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Confirm new password"
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors"
+                                onClick={() => togglePasswordVisibility('confirm')}
+                            >
+                                {showPassword.confirm ? <FiEyeOff /> : <FiEye />}
+                            </button>
+                        </div>
+                        {errors.confirmPassword && <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>}
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg flex items-center justify-center group"
+                    >
+                        {isSubmitting ? 'Updating Password...' : (
+                            <>
+                                <span>Update Password</span>
+                                <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            </>
+                        )}
+                    </button>
+                </form>
+            </div>
         </div>
     )
 }
-

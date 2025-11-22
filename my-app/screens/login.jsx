@@ -1,175 +1,156 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../src/assets/logo.png';
-import { GrCheckbox } from 'react-icons/gr';
-import { GrCheckboxSelected } from 'react-icons/gr';
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Added eye icons
-
+import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from '../src/context/AuthContext';
-
-//backend handling
-
-import { toast } from 'react-toastify'; // For error notifications
-//import 'react-toastify/dist/ReactToastify.css'; // Toast styles
-
-
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
+    const [formData, setFormData] = useState({ email: '', password: '' });
     const [rememberPassword, setRememberPassword] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); // New state for password visibility
-    
-    //backend tracking
-    const [isSubmitting, setIsSubmitting] = useState(false); 
-    const {login} = useAuth();
+    const [showPassword, setShowPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { login } = useAuth();
+    let navigate = useNavigate();
 
-    let navigate=useNavigate();
-    
     useEffect(() => {
-
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
+        setTimeout(() => setLoading(false), 1000);
     }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    //check if info exists
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-     try {
-      const result = await login(formData.email, formData.password);
-
-      if (result.success) {
-        // ✅ Remember username (optional)
-        if (rememberPassword) {
-          localStorage.setItem('rememberedEmail', formData.email);
-        } else {
-          localStorage.removeItem('rememberedEmail');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const result = await login(formData.email, formData.password);
+            if (result.success) {
+                if (rememberPassword) {
+                    localStorage.setItem('rememberedEmail', formData.email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                navigate('/dashboard');
+            } else {
+                toast.error(result.message || "Login failed!");
+            }
+        } catch (err) {
+            toast.error("Something went wrong!");
+        } finally {
+            setIsSubmitting(false);
         }
-
-        navigate('/dashboard'); // ✅ redirect only on success
-      } else {
-        toast.error(result.message || "Login failed!");
-      }
-    } catch (err) {
-      toast.error("Something went wrong!");
-    } finally {
-      setIsSubmitting(false);
-    }
-};
-
- 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
     };
 
+    document.title = "Login";
 
-    document.title="Login";
     return (
-        
-        <div className="Welcome  flex flex-col items-center justify-center p-4 bg-gray-50">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4">
             {loading ? (
                 <div className="flex flex-col items-center animate-pulse">
-                    <img src={logo} className="logo w-32 h-32 mb-4" alt="logo" />
-                    <p className="text-3xl font-bold text-center text-gray-800">
+                    <img src={logo} className="w-32 h-32 mb-4 drop-shadow-2xl" alt="logo" />
+                    <p className="text-3xl font-bold text-center text-white tracking-wide">
                         Welcome to GamerGate!
                     </p>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-                    <div className="mb-4">
-                        <label className="block font-bold mb-2 " htmlFor="username">
-                            Email
-                        </label>
-                        <input
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#F1E9DA]"
-                            type="text"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                        />
+                <div className="glass-card w-full max-w-md p-8 rounded-2xl shadow-2xl animate-fade-in">
+                    <div className="flex justify-center mb-8">
+                        <img src={logo} className="w-24 h-24 drop-shadow-lg" alt="logo" />
                     </div>
+                    <h2 className="text-3xl font-bold text-center mb-8 text-white tracking-tight">Welcome Back</h2>
 
-                    <div className="mb-6 relative">
-                        <label className="block font-bold mb-2" htmlFor="password">
-                            Password
-                        </label>
-                        <div className="relative">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="email">
+                                Email Address
+                            </label>
                             <input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#F1E9DA] pr-10"
-                                type={showPassword ? "text" : "password"}
-                                id="password"
-                                name="password"
-                                value={formData.password}
+                                className="glass-input w-full px-4 py-3 rounded-xl focus:outline-none"
+                                type="text"
+                                id="email"
+                                name="email"
+                                value={formData.email}
                                 onChange={handleInputChange}
+                                placeholder="Enter your email"
                                 required
                             />
-                            <p
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="password">
+                                Password
+                            </label>
+                            <div className="relative">
+                                <input
+                                    className="glass-input w-full px-4 py-3 rounded-xl focus:outline-none pr-12"
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-white transition-colors"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <button
                                 type="button"
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 bg-[#F1E9DA] h-10 "
-                                onClick={togglePasswordVisibility}
-                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                className="flex items-center text-sm text-gray-300 hover:text-white transition-colors focus:outline-none"
+                                onClick={() => setRememberPassword(!rememberPassword)}
                             >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                {rememberPassword ? (
+                                    <GrCheckboxSelected className="text-blue-500 mr-2 text-lg" />
+                                ) : (
+                                    <GrCheckbox className="text-gray-400 mr-2 text-lg" />
+                                )}
+                                Remember me
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => navigate('/email')}
+                                className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                            >
+                                Forgot Password?
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg"
+                        >
+                            {isSubmitting ? 'Signing In...' : 'Sign In'}
+                        </button>
+
+                        <div className="text-center mt-6">
+                            <p className="text-gray-400 text-sm">
+                                Don't have an account?{' '}
+                                <button
+                                    type="button"
+                                    className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+                                    onClick={() => navigate('/signup')}
+                                >
+                                    Sign Up
+                                </button>
                             </p>
                         </div>
-                    </div>
-
-                    <div className="flex items-center mb-6">
-                        <button
-                            type="button"
-                            className="flex items-center focus:outline-none"
-                            onClick={() => setRememberPassword(!rememberPassword)}
-                        >
-                            {rememberPassword ? (
-                                <GrCheckboxSelected className=" text-xl mr-2" />
-                            ) : (
-                                <GrCheckbox className=" text-xl mr-2" />
-                            )}
-                            <span className="text-sm font-medium ">Remember me</span>
-                        </button>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="w-full  hover:bg-blue-700 font-bold py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-[#2C2F48]"
-                        onClick={()=>navigate('/dashboard')}    
-                    >
-                        Log In
-                    </button>
-
-                    <div className="mt-4 text-center">
-                        <button
-                            type="button"
-                            className="text-sm font-semibold text-blue-600 hover:text-blue-800 underline focus:outline-none"
-                            onClick={() => navigate('/signup')}
-                        >
-                            Don't have an account? Sign up
-                        </button>
-                    </div>
-
-                    <div className="mt-2 text-center">
-                        <button  onClick={()=>navigate('/email')} className="text-sm font-semibold text-blue-600 hover:text-gray-800 underline">
-                            Forgot password?
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             )}
         </div>
     );
