@@ -1,6 +1,6 @@
-# GamerGate Platform
+# GamerGate website idea
 
-GamerGate is a comprehensive web application designed for the gaming industry, connecting game developers, studios, and professionals. It features a modern, responsive dashboard for managing job applications, portfolios, and resumes.
+GamerGate is a comprehensive web application prototype designed for the gaming industry, connecting game developers, studios, and professionals. It features a modern, responsive dashboard for managing job applications, portfolios, and resumes.
 
 ## 🚀 Tech Stack
 
@@ -31,7 +31,6 @@ GamerGate is a comprehensive web application designed for the gaming industry, c
 
 ## 🛠️ Prerequisites
 
-Ensure you have the following installed:
 - **Java 17** (Required for Backend)
 - **Node.js** (v18+ recommended for Frontend)
 - **Docker** (For PostgreSQL database)
