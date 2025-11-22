@@ -48,7 +48,7 @@ docker-compose up -d
 This will start a PostgreSQL container on port `5433` (mapped to internal 5432).
 - **DB Name**: `gamergate`
 - **User**: `postgres`
-- **Password**: `14071961`
+- **Password**: `12345678`
 
 ### 2. Backend Setup
 
